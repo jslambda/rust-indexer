@@ -1,1 +1,55 @@
 # rust-indexer
+
+`rust-indexer` builds a JSON search index from the Rust source code in a project. It parses items in the `src/` directory and emits structured metadata that other tools can use to power search, documentation, or code navigation features.
+
+## Installation
+
+The tool is distributed as a Cargo binary. Install it from a local checkout with:
+
+```bash
+cargo install --path .
+```
+
+You can also run it directly with `cargo run --` without installing.
+
+## Usage
+
+```
+rust-indexer [project_root]
+```
+
+- `project_root` (optional): Root of the Rust project to index. Defaults to the current working directory.
+- `-h`, `--help`: Print the built-in usage text.
+
+The CLI writes the index to standard output. Redirect it to a file if you want to save the results:
+
+```bash
+rust-indexer . > index.json
+```
+
+## Output schema
+
+Each entry in the JSON array uses the following fields:
+
+| field        | description                                                                 |
+|--------------|-----------------------------------------------------------------------------|
+| `kind`       | Item type such as `module`, `struct`, `enum`, `trait`, `impl`, or `fn`.      |
+| `name`       | Identifier of the item.                                                     |
+| `file`       | Path to the file containing the item, relative to the project root.         |
+| `line_start` | Starting line number of the item.                                           |
+| `line_end`   | Ending line number of the item.                                             |
+| `signature`  | Rendered signature for the item (e.g., `fn` signature or `impl` header).    |
+| `doc_summary`| First non-empty line of Rust doc comments, if present.                      |
+| `doc`        | Full Rust doc comments joined by newlines, if present.                      |
+
+## How it works
+
+The indexer walks every `.rs` file under `src/`, parses it with `syn`, and extracts top-level modules, structs, enums, traits, functions, and impl blocks. Doc comments are gathered from Rust `///` attributes, and line ranges come from source spans so the index can point back to original code locations.
+
+## Development
+
+Run the test suite to verify changes:
+
+```bash
+cargo test
+```
