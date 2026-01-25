@@ -27,6 +27,34 @@ The CLI writes the index to standard output. Redirect it to a file if you want t
 rust-indexer . > index.json
 ```
 
+## Library usage
+
+`rust-indexer` exposes a small API so you can embed indexing in your own tools. Add it as a dependency:
+
+```toml
+[dependencies]
+rust-indexer = { path = "." }
+```
+
+Then call the library helpers to build and serialize the index:
+
+```rust
+use std::fs::File;
+use std::path::Path;
+
+use rust_indexer::{build_index, write_index_to};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let project_root = Path::new(".");
+    let entries = build_index(project_root)?;
+    let output = File::create("index.json")?;
+
+    write_index_to(&entries, output)?;
+
+    Ok(())
+}
+```
+
 ## Output schema
 
 Each entry in the JSON array uses the following fields:
