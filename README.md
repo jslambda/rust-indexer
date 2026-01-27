@@ -33,7 +33,7 @@ rust-indexer . > index.json
 
 ```toml
 [dependencies]
-rust-indexer = { path = "." }
+rust-indexer = { path = "/path/to/rust-indexer" }
 ```
 
 Then call the library helpers to build and serialize the index:
