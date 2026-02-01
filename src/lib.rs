@@ -52,6 +52,12 @@ pub fn build_index(project_root: &Path) -> Result<Vec<IndexEntry>, Box<dyn std::
     Ok(entries)
 }
 
+pub fn build_file_index(path: &Path) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+    let content = fs::read_to_string(path)?;
+    let parsed: File = syn::parse_file(&content)?;
+    Ok(index_file(path, &parsed))
+}
+
 pub fn write_index_to<W: Write>(
     entries: &[IndexEntry],
     mut writer: W,
@@ -242,6 +248,7 @@ fn impl_name(item: &syn::ItemImpl) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::{SystemTime, UNIX_EPOCH};
 
     #[test]
     fn extracts_docs() {
@@ -254,5 +261,35 @@ mod tests {
         let (summary, doc) = extract_docs(&attrs);
         assert_eq!(summary.as_deref(), Some("Line one"));
         assert_eq!(doc.as_deref(), Some(" Line one \n\nLine two"));
+    }
+
+    #[test]
+    fn builds_index_for_single_file() -> Result<(), Box<dyn std::error::Error>> {
+        let mut path = std::env::temp_dir();
+        let unique = SystemTime::now()
+            .duration_since(UNIX_EPOCH)?
+            .as_nanos();
+        path.push(format!("rust_indexer_test_{unique}.rs"));
+
+        let source = r#"
+            /// Docs for foo.
+            pub fn foo() {}
+
+            struct Bar;
+        "#;
+        fs::write(&path, source)?;
+
+        let entries = build_file_index(&path)?;
+        fs::remove_file(&path)?;
+
+        let mut names: Vec<_> = entries.iter().map(|entry| entry.name.as_str()).collect();
+        names.sort();
+        assert_eq!(names, vec!["Bar", "foo"]);
+
+        let foo_entry = entries.iter().find(|entry| entry.name == "foo").unwrap();
+        assert_eq!(foo_entry.kind, "fn");
+        assert!(foo_entry.file.ends_with(path.file_name().unwrap().to_string_lossy().as_ref()));
+
+        Ok(())
     }
 }
