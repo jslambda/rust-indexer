@@ -55,6 +55,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+If you want to index a single Rust source file, use `build_file_index`:
+
+```rust
+use std::path::Path;
+
+use rust_indexer::build_file_index;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let entries = build_file_index(Path::new("src/lib.rs"))?;
+    println!("Indexed {} entries", entries.len());
+    Ok(())
+}
+```
+
 ## Output schema
 
 Each entry in the JSON array uses the following fields:
