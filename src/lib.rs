@@ -61,7 +61,7 @@ pub fn write_index_to<W: Write>(
     Ok(())
 }
 
-pub fn index_file(path: &Path, parsed: &File) -> Vec<IndexEntry> {
+fn index_file(path: &Path, parsed: &File) -> Vec<IndexEntry> {
     let mut entries = Vec::new();
 
     for item in &parsed.items {
