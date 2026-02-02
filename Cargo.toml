@@ -5,6 +5,7 @@ edition = "2024"
 authors = ["Hamid Alavi Toussi"]
 license = "MIT"
 repository = "https://github.com/jslambda/rust-indexer"
+description = "Reads a Rust project, and builds JSON for indexing"
 
 [dependencies]
 walkdir = "2.5.0"
