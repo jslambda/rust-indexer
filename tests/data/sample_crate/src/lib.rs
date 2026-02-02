@@ -1,4 +1,4 @@
-//! Sample crate for rust-indexer tests.
+//! Sample crate for rust2json tests.
 
 /// Utility helpers module.
 pub mod utils;

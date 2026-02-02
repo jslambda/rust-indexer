@@ -269,7 +269,7 @@ mod tests {
         let unique = SystemTime::now()
             .duration_since(UNIX_EPOCH)?
             .as_nanos();
-        path.push(format!("rust_indexer_test_{unique}.rs"));
+        path.push(format!("rust2json_test_{unique}.rs"));
 
         let source = r#"
             /// Docs for foo.

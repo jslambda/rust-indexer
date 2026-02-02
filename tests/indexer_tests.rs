@@ -1,4 +1,4 @@
-use rust_indexer::{IndexEntry, build_index};
+use rust2json::{IndexEntry, build_index};
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -27,7 +27,7 @@ fn indexes_sample_crate() {
 
 #[test]
 fn prints_usage_with_help_flag() {
-    let output = Command::new(env!("CARGO_BIN_EXE_rust-indexer"))
+    let output = Command::new(env!("CARGO_BIN_EXE_rust2json"))
         .arg("--help")
         .output()
         .expect("run binary");
