@@ -1,6 +1,6 @@
-# rust-indexer
+# rust2json
 
-`rust-indexer` builds a JSON search index from the Rust source code in a project. It parses items in the `src/` directory and emits structured metadata that other tools can use to power search, documentation, or code navigation features.
+`rust2json` builds a JSON search index from the Rust source code in a project. It parses items in the `src/` directory and emits structured metadata that other tools can use to power search, documentation, or code navigation features.
 
 ## Installation
 
@@ -15,7 +15,7 @@ You can also run it directly with `cargo run --` without installing.
 ## Usage
 
 ```
-rust-indexer [project_root]
+rust2json [project_root]
 ```
 
 - `project_root` (optional): Root of the Rust project to index. Defaults to the current working directory.
@@ -24,16 +24,16 @@ rust-indexer [project_root]
 The CLI writes the index to standard output. Redirect it to a file if you want to save the results:
 
 ```bash
-rust-indexer . > index.json
+rust2json . > index.json
 ```
 
 ## Library usage
 
-`rust-indexer` exposes a small API so you can embed indexing in your own tools. Add it as a dependency:
+`rust2json` exposes a small API so you can embed indexing in your own tools. Add it as a dependency:
 
 ```toml
 [dependencies]
-rust-indexer = { git = "https://github.com/jslambda/rust-indexer" }
+rust2json = "0.1.0"
 ```
 
 Then call the library helpers to build and serialize the index:
@@ -42,7 +42,7 @@ Then call the library helpers to build and serialize the index:
 use std::fs::File;
 use std::path::Path;
 
-use rust_indexer::{build_index, write_index_to};
+use rust2json::{build_index, write_index_to};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let project_root = Path::new(".");
@@ -60,7 +60,7 @@ If you want to index a single Rust source file, use `build_file_index`:
 ```rust
 use std::path::Path;
 
-use rust_indexer::build_file_index;
+use rust2json::build_file_index;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let entries = build_file_index(Path::new("src/lib.rs"))?;

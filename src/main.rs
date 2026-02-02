@@ -2,7 +2,7 @@ use std::env;
 use std::path::PathBuf;
 use std::process;
 
-use rust_indexer::{build_index, write_index_to};
+use rust2json::{build_index, write_index_to};
 
 fn main() {
     if let Err(err) = run() {
@@ -15,7 +15,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let mut args = env::args();
     let program_name = args
         .next()
-        .unwrap_or_else(|| String::from("rust-indexer"));
+        .unwrap_or_else(|| String::from("rust2json"));
 
     let root_arg = args.next();
     if matches!(root_arg.as_deref(), Some("--help") | Some("-h")) {

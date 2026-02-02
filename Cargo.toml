@@ -1,7 +1,10 @@
 [package]
-name = "rust-indexer"
+name = "rust2json"
 version = "0.1.0"
 edition = "2024"
+authors = ["Hamid Alavi Toussi"]
+license = "MIT"
+repository = "https://github.com/jslambda/rust-indexer"
 
 [dependencies]
 walkdir = "2.5.0"
